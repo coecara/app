@@ -112,6 +112,7 @@ function App() {
                     })
                       .then(function (response) {
                         console.log(response);
+                        setSummarizeText('こんにちは');
                       })
                       .catch(function (error) {
                         console.log(error);
