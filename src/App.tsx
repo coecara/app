@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
@@ -14,11 +14,12 @@ declare global {
 }
 
 function App() {
-  let speechRecognition: SpeechRecognition;
+  const recognizerRef = useRef<SpeechRecognition>();
   const [finalText, setFinalText] = useState(''); // 確定された文章
   const [transcript, setTranscript] = useState(''); // 認識中の文章
   const [detecting, setDetecting] = useState(false); // 音声認識ステータス
   const [lineCount, setLinuCount] = useState('3');
+  const [summarizeText, setSummarizeText] = useState(''); // 要約された文章
 
   useEffect(() => {
     // NOTE: Web Speech APIが使えるブラウザか判定
@@ -30,17 +31,17 @@ function App() {
     // NOTE: 将来的にwebkit prefixが取れる可能性があるため
     const SpeechRecognition =
       window.SpeechRecognition || window.webkitSpeechRecognition;
-    speechRecognition = new SpeechRecognition();
-    speechRecognition.lang = 'ja-JP';
-    speechRecognition.interimResults = true;
-    speechRecognition.continuous = true;
-    speechRecognition.onstart = () => {
+    recognizerRef.current = new SpeechRecognition();
+    recognizerRef.current.lang = 'ja-JP';
+    recognizerRef.current.interimResults = true;
+    recognizerRef.current.continuous = true;
+    recognizerRef.current.onstart = () => {
       setDetecting(true);
     };
-    speechRecognition.onend = () => {
+    recognizerRef.current.onend = () => {
       setDetecting(false);
     };
-    speechRecognition.onresult = (event: SpeechRecognitionEvent) => {
+    recognizerRef.current.onresult = (event: SpeechRecognitionEvent) => {
       [...event.results].slice(event.resultIndex).forEach(result => {
         const transcript = result[0].transcript;
         setTranscript(transcript);
@@ -74,6 +75,9 @@ function App() {
           <Box fontSize={25}>
             <TranscriptField finalText={finalText} transcript={transcript} />
           </Box>
+          <Box fontSize={25}>
+            <TranscriptField finalText={summarizeText} transcript={''} />
+          </Box>
         </Grid>
         <Box m={5}>
           <Grid container justify="center" spacing={5}>
@@ -84,7 +88,7 @@ function App() {
                 color="secondary"
                 size="large"
                 onClick={() => {
-                  speechRecognition.start();
+                  recognizerRef.current?.start();
                 }}
               >
                 {detecting ? '検知中...' : '検知開始'}
