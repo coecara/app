@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import TranscriptField from './components/TranscriptField';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import axios from 'axios';
 
 declare global {
   interface Window {
@@ -16,6 +17,8 @@ function App() {
   let speechRecognition: SpeechRecognition;
   const [finalText, setFinalText] = useState(''); // 確定された文章
   const [transcript, setTranscript] = useState(''); // 認識中の文章
+  const [detecting, setDetecting] = useState(false); // 音声認識ステータス
+  const [lineCount, setLinuCount] = useState('3');
 
   useEffect(() => {
     // NOTE: Web Speech APIが使えるブラウザか判定
@@ -53,7 +56,6 @@ function App() {
     };
   }, []);
 
-  const [detecting, setDetecting] = useState(false); // 音声認識ステータス
   return (
     <div className="App" style={{ marginTop: 50 + 'px' }}>
       <Container>
@@ -92,11 +94,24 @@ function App() {
               <Grid container item justify="center">
                 <Button
                   variant="outlined"
-                  // disabled={detecting}
                   color="secondary"
                   size="large"
                   onClick={() => {
-                    // recognizerRef.current.start();
+                    axios({
+                      method: 'post',
+                      url:
+                        'https://h4xuyae3td.execute-api.ap-northeast-1.amazonaws.com/default/coecara-summarize-api-dev',
+                      data: {
+                        line_count: lineCount,
+                        text: finalText,
+                      },
+                    })
+                      .then(function (response) {
+                        console.log(response);
+                      })
+                      .catch(function (error) {
+                        console.log(error);
+                      });
                   }}
                 >
                   自動要約
@@ -108,7 +123,10 @@ function App() {
                   <TextField
                     id="standard-basic"
                     type="number"
-                    defaultValue={3}
+                    value={lineCount}
+                    onChange={event => {
+                      setLinuCount(event.target.value);
+                    }}
                   />
                 </form>
               </Grid>
