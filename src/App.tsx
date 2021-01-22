@@ -7,6 +7,39 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 function App() {
+  const recognizerRef = useRef < SpeechRecognition > null;
+
+  useEffect(() => {
+    // NOTE: Web Speech APIが使えるブラウザか判定
+    // https://developer.mozilla.org/ja/docs/Web/API/Web_Speech_API
+    if (!window.SpeechRecognition) {
+      alert('お使いのブラウザには未対応です');
+      return;
+    }
+    // NOTE: 将来的にwebkit prefixが取れる可能性があるため
+    const SpeechRecognition = window.SpeechRecognition;
+    recognizerRef.current = new SpeechRecognition();
+    recognizerRef.current.lang = 'ja-JP';
+    recognizerRef.current.interimResults = true;
+    recognizerRef.current.continuous = true;
+    recognizerRef.current.onstart = () => {};
+    recognizerRef.current.onresult = (event: SpeechRecognitionEvent) => {
+      [...event.results].slice(event.resultIndex).forEach((result) => {
+        const transcript = result[0].transcript;
+        setTranscript(transcript);
+        if (result.isFinal) {
+          // 音声認識が完了して文章が確定
+          setFinalText((prevState) => {
+            // Android chromeなら値をそのまま返す
+            return isAndroid ? transcript : prevState + transcript;
+          });
+          // 文章確定したら候補を削除
+          setTranscript('');
+        }
+      });
+    };
+  });
+
   const [detecting, setDetecting] = useState(false); // 音声認識ステータス
   return (
     <div className="App" style={{marginTop: 50 + 'px'}}>
@@ -36,7 +69,7 @@ function App() {
                 color="secondary"
                 size="large"
                 onClick={() => {
-                  // recognizerRef.current.start();
+                  recognizerRef.current.start();
                 }}>
                 {detecting ? '検知中...' : '検知開始'}
               </Button>
