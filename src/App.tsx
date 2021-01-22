@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
-import Textarea from './components/Textarea';
+import TranscriptField from './components/TranscriptField';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
@@ -14,6 +14,8 @@ declare global {
 
 function App() {
   let speechRecognition: SpeechRecognition;
+  const [finalText, setFinalText] = useState(''); // 確定された文章
+  const [transcript, setTranscript] = useState(''); // 認識中の文章
 
   useEffect(() => {
     // NOTE: Web Speech APIが使えるブラウザか判定
@@ -29,7 +31,12 @@ function App() {
     speechRecognition.lang = 'ja-JP';
     speechRecognition.interimResults = true;
     speechRecognition.continuous = true;
-    speechRecognition.onstart = () => {};
+    speechRecognition.onstart = () => {
+      setDetecting(true);
+    };
+    speechRecognition.onend = () => {
+      setDetecting(false);
+    };
     speechRecognition.onresult = (event: SpeechRecognitionEvent) => {
       [...event.results].slice(event.resultIndex).forEach(result => {
         const transcript = result[0].transcript;
@@ -37,8 +44,7 @@ function App() {
         if (result.isFinal) {
           // 音声認識が完了して文章が確定
           setFinalText(prevState => {
-            // Android chromeなら値をそのまま返す
-            return isAndroid ? transcript : prevState + transcript;
+            return prevState + transcript;
           });
           // 文章確定したら候補を削除
           setTranscript('');
@@ -63,16 +69,16 @@ function App() {
           </header>
         </Grid>
         <Grid container>
-          <Grid container item justify="center">
-            <Textarea />
-          </Grid>
+          <Box fontSize={25}>
+            <TranscriptField finalText={finalText} transcript={transcript} />
+          </Box>
         </Grid>
         <Box m={5}>
           <Grid container justify="center" spacing={5}>
             <Grid item xs={3}>
               <Button
                 variant="outlined"
-                // disabled={detecting}
+                disabled={detecting}
                 color="secondary"
                 size="large"
                 onClick={() => {
