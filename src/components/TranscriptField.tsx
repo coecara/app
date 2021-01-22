@@ -1,5 +1,4 @@
 import * as React from 'react';
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 
 type Props = {
   finalText: string;
