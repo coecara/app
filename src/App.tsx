@@ -101,21 +101,22 @@ function App() {
                   color="secondary"
                   size="large"
                   onClick={() => {
-                    axios({
-                      method: 'post',
-                      url:
+                    const instance = axios.create({
+                      baseURL:
                         'https://h4xuyae3td.execute-api.ap-northeast-1.amazonaws.com/default/coecara-summarize-api-dev',
-                      data: {
+                    });
+                    instance
+                      .post('/', {
                         line_count: lineCount,
                         text: finalText,
-                      },
-                    })
-                      .then(function (response) {
-                        console.log(response);
-                        setSummarizeText('こんにちは');
                       })
-                      .catch(function (error) {
-                        console.log(error);
+                      .then(results => {
+                        //console.log(results.json())
+                        console.log(results);
+                        setSummarizeText(results.data['messsummaryage']);
+                      })
+                      .catch(results => {
+                        console.log(results);
                       });
                   }}
                 >
