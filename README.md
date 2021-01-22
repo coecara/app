@@ -1,4 +1,12 @@
-# Getting Started with Create React App
+# Coecara
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/452ce801-4955-427a-873d-c16b768d7647/deploy-status)](https://app.netlify.com/sites/boring-benz-79b0d3/deploys)
+
+
+----
+
+
+Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
