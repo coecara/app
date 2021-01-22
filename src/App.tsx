@@ -9,15 +9,16 @@ import Button from '@material-ui/core/Button';
 function App() {
   const [detecting, setDetecting] = useState(false); // 音声認識ステータス
   return (
-    <div className="App">
+    <div className="App" style={{marginTop: 50 + 'px'}}>
       <Container>
         <Grid container justify="center">
           <header className="App-header">
             <Box textAlign="center">
               <Box fontSize="h4.fontSize">
-                <h1>コエカラ</h1>
+                <h1 style={{marginBottom: 0}}>コエカラ</h1>
               </Box>
               <p>良い感じに文章を整えてくれる・音声文字起こしサービス</p>
+              <h1>📣 ➡ 📝</h1>
             </Box>
           </header>
         </Grid>
