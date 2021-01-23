@@ -18,7 +18,7 @@ function App() {
   const [finalText, setFinalText] = useState(''); // 確定された文章
   const [transcript, setTranscript] = useState(''); // 認識中の文章
   const [detecting, setDetecting] = useState(false); // 音声認識ステータス
-  const [lineCount, setLinuCount] = useState('3');
+  const [lineCount, setLinuCount] = useState('5');
   const [summarizeText, setSummarizeText] = useState(''); // 要約された文章
 
   useEffect(() => {
@@ -71,13 +71,21 @@ function App() {
             </Box>
           </header>
         </Grid>
-        <Grid container>
-          <Box fontSize={25}>
-            <TranscriptField finalText={finalText} transcript={transcript} />
-          </Box>
-          <Box fontSize={25}>
-            <TranscriptField finalText={summarizeText} transcript={''} />
-          </Box>
+        <Grid container direction="column">
+          <Grid item>
+            <Box fontSize={25}>
+              <h4>文字起こしテキスト</h4>
+              <TranscriptField finalText={finalText} transcript={transcript} />
+            </Box>
+          </Grid>
+          <Grid item>
+            <Box fontSize={25}>
+              <h4>要約後テキスト</h4>
+              {summarizeText && (
+                <TranscriptField finalText={summarizeText} transcript={''} />
+              )}
+            </Box>
+          </Grid>
         </Grid>
         <Box m={5}>
           <Grid container justify="center" spacing={5}>
@@ -101,19 +109,17 @@ function App() {
                   color="secondary"
                   size="large"
                   onClick={() => {
-                    const instance = axios.create({
-                      baseURL:
+                    axios({
+                      method: 'post',
+                      url:
                         'https://h4xuyae3td.execute-api.ap-northeast-1.amazonaws.com/default/coecara-summarize-api-dev',
-                    });
-                    instance
-                      .post('/', {
+                      data: {
                         line_count: lineCount,
                         text: finalText,
-                      })
+                      },
+                    })
                       .then(results => {
-                        //console.log(results.json())
-                        console.log(results);
-                        setSummarizeText(results.data['messsummaryage']);
+                        setSummarizeText(results.data['summary']);
                       })
                       .catch(results => {
                         console.log(results);
