@@ -1,0 +1,3 @@
+http://coecara.netlify.app/*  https://coecara.com:splat  301
+http://coecara.com/*  https://coecara.com:splat  301
+http://www.coecara.com/*  https://coecara.com:splat  301
