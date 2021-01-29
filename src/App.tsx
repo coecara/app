@@ -40,10 +40,11 @@ function App() {
 
   const recognizerRef = useRef<SpeechRecognition>();
   const [finalText, setFinalText] = useState(
-    '「検知開始」ボタンを押して、文字起こし開始します。左の「自動要約」ボタンで要約します。'
+    '「検知開始」ボタンを押して、文字起こし開始します。左の「要約開始」ボタンで要約します。'
   ); // 確定された文章
   const [transcript, setTranscript] = useState(''); // 認識中の文章
   const [detecting, setDetecting] = useState(false); // 音声認識ステータス
+  const [summarizing, setSummarizing] = useState(false); // 音声認識ステータス
   const [lineCount, setLinuCount] = useState('3');
   const [summarizeText, setSummarizeText] = useState(''); // 要約された文章
 
@@ -129,6 +130,7 @@ function App() {
                 color="secondary"
                 size="large"
                 onClick={() => {
+                  setSummarizing(true);
                   axios({
                     method: 'post',
                     url:
@@ -140,13 +142,15 @@ function App() {
                   })
                     .then(results => {
                       setSummarizeText(results.data['summary']);
+                      setSummarizing(false);
                     })
                     .catch(results => {
                       console.log(results);
+                      setSummarizing(false);
                     });
                 }}
               >
-                自動要約
+                {summarizing ? '要約中...' : '要約開始'}
               </Button>
               <p>要約する行数を指定</p>
               <form noValidate autoComplete="off">
