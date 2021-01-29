@@ -127,6 +127,7 @@ function App() {
             <Grid item container direction="column" alignItems="center">
               <Button
                 variant="outlined"
+                disabled={summarizing}
                 color="secondary"
                 size="large"
                 onClick={() => {
