@@ -1,11 +1,33 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Container from '@material-ui/core/Container';
-import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
 import TranscriptField from './components/TranscriptField';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      flexGrow: 1,
+    },
+    paper: {
+      padding: theme.spacing(2),
+      textAlign: 'center',
+    },
+    trascriptTitle: {
+      fontSize: 20,
+      textAlign: 'center',
+    },
+    transcriptField: {
+      color: theme.palette.text.secondary,
+      minHeight: 50,
+      marginBottom: 30,
+    },
+  })
+);
 
 declare global {
   interface Window {
@@ -14,11 +36,15 @@ declare global {
 }
 
 function App() {
+  const classes = useStyles();
+
   const recognizerRef = useRef<SpeechRecognition>();
-  const [finalText, setFinalText] = useState(''); // 確定された文章
+  const [finalText, setFinalText] = useState(
+    '「検知開始」ボタンを押して、文字起こし開始します。左の「自動要約」ボタンで要約します。'
+  ); // 確定された文章
   const [transcript, setTranscript] = useState(''); // 認識中の文章
   const [detecting, setDetecting] = useState(false); // 音声認識ステータス
-  const [lineCount, setLinuCount] = useState('5');
+  const [lineCount, setLinuCount] = useState('3');
   const [summarizeText, setSummarizeText] = useState(''); // 要約された文章
 
   useEffect(() => {
@@ -58,12 +84,12 @@ function App() {
   }, []);
 
   return (
-    <div className="App" style={{ marginTop: 50 + 'px' }}>
+    <div className="App" style={{ marginTop: 5 + 'vh' }}>
       <Container>
         <Grid container justify="center">
           <header className="App-header">
             <Box textAlign="center">
-              <Box fontSize="h4.fontSize">
+              <Box fontSize="h5.fontSize">
                 <h1 style={{ marginBottom: 0 }}>コエカラ</h1>
               </Box>
               <p>良い感じに文章を整えてくれる・音声文字起こしサービス</p>
@@ -71,80 +97,71 @@ function App() {
             </Box>
           </header>
         </Grid>
-        <Grid container direction="column">
-          <Grid item>
-            <Box fontSize={25}>
-              <h4>文字起こしテキスト</h4>
+        <Grid container direction="row" spacing={3}>
+          <Grid item container xs={6} direction="column" alignItems="center">
+            <h4 className={classes.trascriptTitle}>文字起こしテキスト</h4>
+            <Box fontSize={18} className={classes.transcriptField}>
               <TranscriptField finalText={finalText} transcript={transcript} />
             </Box>
+            <Button
+              variant="outlined"
+              disabled={detecting}
+              color="secondary"
+              size="large"
+              onClick={() => {
+                setFinalText('');
+                recognizerRef.current?.start();
+              }}
+            >
+              {detecting ? '検知中...' : '検知開始'}
+            </Button>
           </Grid>
-          <Grid item>
-            <Box fontSize={25}>
-              <h4>要約後テキスト</h4>
+          <Grid item xs={6}>
+            <h4 className={classes.trascriptTitle}>要約テキスト</h4>
+            <Box fontSize={18} className={classes.transcriptField}>
               {summarizeText && (
                 <TranscriptField finalText={summarizeText} transcript={''} />
               )}
             </Box>
-          </Grid>
-        </Grid>
-        <Box m={5}>
-          <Grid container justify="center" spacing={5}>
-            <Grid item xs={3}>
+            <Grid item container direction="column" alignItems="center">
               <Button
                 variant="outlined"
-                disabled={detecting}
                 color="secondary"
                 size="large"
                 onClick={() => {
-                  recognizerRef.current?.start();
+                  axios({
+                    method: 'post',
+                    url:
+                      'https://h4xuyae3td.execute-api.ap-northeast-1.amazonaws.com/default/coecara-summarize-api-dev',
+                    data: {
+                      line_count: lineCount,
+                      text: finalText,
+                    },
+                  })
+                    .then(results => {
+                      setSummarizeText(results.data['summary']);
+                    })
+                    .catch(results => {
+                      console.log(results);
+                    });
                 }}
               >
-                {detecting ? '検知中...' : '検知開始'}
+                自動要約
               </Button>
-            </Grid>
-            <Grid container item xs={3} justify="center">
-              <Grid container item justify="center">
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  size="large"
-                  onClick={() => {
-                    axios({
-                      method: 'post',
-                      url:
-                        'https://h4xuyae3td.execute-api.ap-northeast-1.amazonaws.com/default/coecara-summarize-api-dev',
-                      data: {
-                        line_count: lineCount,
-                        text: finalText,
-                      },
-                    })
-                      .then(results => {
-                        setSummarizeText(results.data['summary']);
-                      })
-                      .catch(results => {
-                        console.log(results);
-                      });
+              <p>要約する行数を指定</p>
+              <form noValidate autoComplete="off">
+                <TextField
+                  id="standard-basic"
+                  type="number"
+                  value={lineCount}
+                  onChange={event => {
+                    setLinuCount(event.target.value);
                   }}
-                >
-                  自動要約
-                </Button>
-              </Grid>
-              <Grid container item justify="center">
-                <p>要約する行数を指定</p>
-                <form noValidate autoComplete="off">
-                  <TextField
-                    id="standard-basic"
-                    type="number"
-                    value={lineCount}
-                    onChange={event => {
-                      setLinuCount(event.target.value);
-                    }}
-                  />
-                </form>
-              </Grid>
+                />
+              </form>
             </Grid>
           </Grid>
-        </Box>
+        </Grid>
       </Container>
     </div>
   );

@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 type Props = {
   finalText: string;
   transcript: string;
