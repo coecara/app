@@ -11,6 +11,9 @@ https://coecara.com/
 
 
 ```
+$ git clone https://github.com/naogify/coecara-app.git
+$ cd coecara-app/
+
 # 依存関係をインストール
 $ npm install
 
