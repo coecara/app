@@ -2,11 +2,9 @@
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/452ce801-4955-427a-873d-c16b768d7647/deploy-status)](https://app.netlify.com/sites/boring-benz-79b0d3/deploys)
 
-コエカラ(Coecara)は、良い感じに文章を整えてくれる・音声文字起こしサービスです。
+コエカラ(Coecara)は、良い感じに文章を整えてくれる・音声文字起こしサービスです。主な機能は、音声文字起こしと自動要約です。
 
-機能
-- 音声文字起こし
-- 自動要約
+https://coecara.com/  
 
 
 ## 開発者向け
