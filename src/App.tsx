@@ -39,12 +39,15 @@ function App() {
   const classes = useStyles();
 
   const recognizerRef = useRef<SpeechRecognition>();
+
+  const [transcript, setTranscript] = useState(''); // 認識中の文章
   const [finalText, setFinalText] = useState(
     '「検知開始」ボタンを押して、文字起こし開始します。左の「要約開始」ボタンで要約します。'
-  ); // 確定された文章
-  const [transcript, setTranscript] = useState(''); // 認識中の文章
+  ); // 確定した文章
+
   const [detecting, setDetecting] = useState(false); // 音声認識ステータス
   const [summarizing, setSummarizing] = useState(false); // 音声認識ステータス
+
   const [lineCount, setLinuCount] = useState('3');
   const [summarizeText, setSummarizeText] = useState(''); // 要約された文章
 
@@ -55,19 +58,22 @@ function App() {
       alert('お使いのブラウザには未対応です');
       return;
     }
-    // NOTE: 将来的にwebkit prefixが取れる可能性があるため
+
     const SpeechRecognition =
       window.SpeechRecognition || window.webkitSpeechRecognition;
     recognizerRef.current = new SpeechRecognition();
     recognizerRef.current.lang = 'ja-JP';
     recognizerRef.current.interimResults = true;
     recognizerRef.current.continuous = true;
+
     recognizerRef.current.onstart = () => {
       setDetecting(true);
     };
+
     recognizerRef.current.onend = () => {
       setDetecting(false);
     };
+
     recognizerRef.current.onresult = (event: SpeechRecognitionEvent) => {
       [...event.results].slice(event.resultIndex).forEach(result => {
         const transcript = result[0].transcript;
