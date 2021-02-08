@@ -24,4 +24,4 @@ http://localhost:3000 で立ち上がります。
 
 
 *開発環境では、要約APIへのアクセスが制限されています。  
-*音声文字起こしに[SpeechRecognition](https://developer.mozilla.org/ja/docs/Web/API/SpeechRecognition)を使用しているため、Google Chrome と Microsoft Edge のみ対応です。
+*音声文字起こしに [SpeechRecognition](https://developer.mozilla.org/ja/docs/Web/API/SpeechRecognition) を使用しているため、Google Chrome と Microsoft Edge のみ対応です。
