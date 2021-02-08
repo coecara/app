@@ -23,4 +23,5 @@ $ npm start
 http://localhost:3000 で立ち上がります。  
 
 
-*開発環境では、要約APIへのアクセスが制限されています。
+*開発環境では、要約APIへのアクセスが制限されています。  
+*音声文字起こしに`SpeechRecognition`を使用しているため、GoogleChromeとMicrosoftEdgeのみ対応です。
