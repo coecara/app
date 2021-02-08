@@ -7,6 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import Config from './config';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -140,8 +141,7 @@ function App() {
                   setSummarizing(true);
                   axios({
                     method: 'post',
-                    url:
-                      'https://h4xuyae3td.execute-api.ap-northeast-1.amazonaws.com/default/coecara-summarize-api-dev',
+                    url: Config.apiUrl,
                     data: {
                       line_count: lineCount,
                       text: finalText,
