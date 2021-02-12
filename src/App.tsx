@@ -37,10 +37,30 @@ const useStyles = makeStyles((theme: Theme) =>
       marginTop: 30,
       marginBottom: 40,
     },
+    footerContainer: {
+      marginTop: 50,
+    },
+    footerInfo: {
+      listStyle: 'none',
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      maxWidth: 200,
+      margin: 'auto',
+      padding: 0,
+    },
+    footerInfoItem: {
+      margin: 10,
+    },
     titleIcon: {
       width: 35,
       height: 35,
       margin: '0 10px',
+    },
+    copyRight: {
+      display: 'flex',
+      justifyContent: 'center',
+      margin: '10px 0',
     },
   })
 );
@@ -108,7 +128,7 @@ function App() {
 
   return (
     <div className="App" style={{ marginTop: 5 + 'vh' }}>
-      <Container>
+      <Container style={{ height: 90 + 'vh' }}>
         <Grid container justify="center">
           <header className="App-header">
             <Box textAlign="center">
@@ -191,6 +211,29 @@ function App() {
             </Grid>
           </Grid>
         </Grid>
+        <div className={classes.footerContainer}>
+          <ul className={classes.footerInfo}>
+            <li className={classes.footerInfoItem}>
+              <a
+                href={'https://twitter.com/naogify'}
+                rel="noreferrer"
+                target="_blank"
+              >
+                お問い合わせ
+              </a>
+            </li>
+            <li className={classes.footerInfoItem}>
+              <a
+                href={'https://github.com/coecara'}
+                rel="noreferrer"
+                target="_blank"
+              >
+                GitHub
+              </a>
+            </li>
+          </ul>
+          <small className={classes.copyRight}>© 2021 コエカラ</small>
+        </div>
       </Container>
     </div>
   );
