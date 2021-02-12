@@ -25,3 +25,10 @@ http://localhost:3000 で立ち上がります。
 
 *開発環境では、要約APIへのアクセスが制限されています。  
 *音声文字起こしに [SpeechRecognition](https://developer.mozilla.org/ja/docs/Web/API/SpeechRecognition) を使用しているため、Google Chrome と Microsoft Edge のみ対応です。
+
+## サードパーティリソース
+
+### Twemoji
+- Copyright 2020 Twitter, Inc and other contributors
+- Code licensed under the MIT License: http://opensource.org/licenses/MIT
+- Graphics licensed under CC-BY 4.0: https://creativecommons.org/licenses/by/4.0/
