@@ -8,6 +8,8 @@ import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Config from './config';
+import { ReactComponent as MegaphoneIcon } from './assets/1f4e3.svg';
+import { ReactComponent as MemoIcon } from './assets/1f4dd.svg';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -26,6 +28,19 @@ const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.text.secondary,
       minHeight: 50,
       marginBottom: 30,
+    },
+    titleIconContainer: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontSize: 25,
+      marginTop: 30,
+      marginBottom: 40,
+    },
+    titleIcon: {
+      width: 35,
+      height: 35,
+      margin: '0 10px',
     },
   })
 );
@@ -101,7 +116,10 @@ function App() {
                 <h1 style={{ marginBottom: 0 }}>コエカラ</h1>
               </Box>
               <p>良い感じに文章を整えてくれる・音声文字起こしサービス</p>
-              <h1>📣 ➡ 📝</h1>
+              <div className={classes.titleIconContainer}>
+                <MegaphoneIcon className={classes.titleIcon} /> ➡{' '}
+                <MemoIcon className={classes.titleIcon} />
+              </div>
             </Box>
           </header>
         </Grid>
