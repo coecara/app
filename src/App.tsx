@@ -91,7 +91,9 @@ function App() {
     // NOTE: Web Speech APIが使えるブラウザか判定
     // https://developer.mozilla.org/ja/docs/Web/API/Web_Speech_API
     if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
-      alert('お使いのブラウザには未対応です');
+      alert(
+        '申し訳ありません。お使いのブラウザには未対応です。🙏 デスクトップの Google Chrome と Microsoft Edge でお使い下さい。'
+      );
       return;
     }
 
