@@ -92,7 +92,7 @@ function App() {
     // https://developer.mozilla.org/ja/docs/Web/API/Web_Speech_API
     if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
       alert(
-        '申し訳ありません。お使いのブラウザには未対応です。🙏 デスクトップの Google Chrome と Microsoft Edge でお使い下さい。'
+        '申し訳ありません。お使いのブラウザには未対応です。🙏 デスクトップの Google Chrome か Microsoft Edge でお使い下さい。'
       );
       return;
     }
